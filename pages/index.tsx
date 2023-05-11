@@ -28,12 +28,12 @@ export default function Home() {
   };
 
   //Gets a list of HTML nodes based on CreatureKind list
-  let list = [];
+  let creatureList = [];
   for (let [
     key,
     value
   ] of logInformation.damageTaken.byCreatureKind.entries()) {
-    list.push(
+    creatureList.push(
       <li key={key + value.toString()} className="flex items-center">
         <img
           alt="" //Decorative Image Only
@@ -43,6 +43,17 @@ export default function Home() {
         />
         <p>
           By {key.replace(/(?:^|\s)\S/g, (a) => a.toUpperCase())}: {value}hp
+        </p>
+      </li>
+    );
+  }
+
+  let lootList = [];
+  for (let [key, value] of logInformation.loot.entries()) {
+    lootList.push(
+      <li key={key + value.toString()} className="flex items-center">
+        <p>
+          {value} {key.replace(/(?:^|\s)\S/g, (a) => a.toUpperCase())}
         </p>
       </li>
     );
@@ -89,7 +100,7 @@ export default function Home() {
               />
               <p>Damage Taken Total: {logInformation.damageTaken.total}hp</p>
             </li>
-            <ul>{list}</ul>
+            <ul>{creatureList}</ul>
             <li className="flex items-center">
               <img
                 src="https://www.tibiawiki.com.br/images/b/b2/Achievement_Info_1-1.gif"
@@ -99,6 +110,8 @@ export default function Home() {
                 Experience Gained Total: {logInformation.experienceGained}xp
               </p>
             </li>
+            <p>List of Items</p>
+            <ul>{lootList}</ul>
           </ul>
         </section>
 

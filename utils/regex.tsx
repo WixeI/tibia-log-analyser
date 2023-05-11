@@ -20,15 +20,24 @@ export const regexGainExperience = /You gained (\d+) experience points\./;
 
 /**
  * match[1]: monsterName
+ *
  * match[2]: damageAmount
  */
 export const regexDealDamage =
   /^(?:A|An)\s+(.+)\s+loses\s+(\d+)\s+hitpoints\s+due\s+to\s+your\s+attack\.$/i;
 
 /**
- * match[1]: 
+ * match[1]:
  */
-export const regexLoot = / /;
+export const regexLootCreature = /Loot of\s+(?:a|an)\s+([a-z\s]+):\s+(.*)/;
+
+/**
+ * match[1]: amount (number/a/an/undefined)
+ *
+ * match[2]: name
+ */
+export const regexLootItems =
+  /\s*(\b(?:an?|\d+)\b)?\s*([^\d\W][\w'’]*(?:\s+[^\d\W_]+)*)\b/g;
 
 //regexHealYourself Example
 // const match = "You healed yourself for 328 hitpoints.".match(regexHealYourself);
@@ -73,4 +82,32 @@ export const regexLoot = / /;
 
 // console.log(`Monster: ${monster}`);
 // console.log(`Number: ${number}`);
+// }
+
+// regexLootCreature Example
+// const text =
+//   "Loot of a giant spider ultra an strong: a gold coin, an elixir, 21 silver coins, spider fang.";
+// const regex = /Loot of\s+(?:a|an)\s+([a-z\s]+):\s+(.*)/;
+// const match = text.match(regex);
+// if (match) {
+//   const monster = match[1];
+//   const rest = match[2];
+//   console.log(monster + " - and - " + rest);
+// }
+
+// regexLootItems Example
+// const regex = /\s*(\b(?:an?|\d+)\b)?\s*([^\d\W][\w'’]*(?:\s+[^\d\W_]+)*)\b/g;
+
+// const str = `a golden coin, an elixir, 21 bullets, spider eye`;
+// let match;
+
+// while ((match = regex.exec(str)) !== null) {
+//   // This is necessary to avoid infinite loops with zero-width matches
+//   if (match.index === regex.lastIndex) {
+//     regex.lastIndex++;
+//   }
+
+//   for (let i = 1; i < match.length; i++) {
+//     console.log(`Found match, group: ${match[i]}`);
+//   }
 // }

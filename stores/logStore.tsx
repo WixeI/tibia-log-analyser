@@ -3,7 +3,8 @@ import { create } from "zustand";
 import {
   regexHealYourself,
   regexGainExperience,
-  regexLoot,
+  regexLootCreature,
+  regexLootItems,
   regexLoseHitpoint
 } from "../utils/regex";
 
@@ -20,9 +21,7 @@ type LogStore = {
       byCreatureKind: Map<string, number>;
     };
     experienceGained: number;
-    loot: {
-      [key: string]: number;
-    };
+    loot: Map<string, number>;
   };
   analyzeLog: (log: string[]) => void | Error;
   // blackKnightHealthRange: () => number;
@@ -34,7 +33,7 @@ export const useLogStore = create<LogStore>()((set) => ({
     hitpointsHealed: 0,
     damageTaken: { total: 0, byCreatureKind: new Map<string, number>() },
     experienceGained: 0,
-    loot: {}
+    loot: new Map<string, number>()
   },
   analyzeLog: (log) => {
     if (log.length < 1) return { name: "Empty Log", body: "Log is Empty!" };
@@ -46,7 +45,7 @@ export const useLogStore = create<LogStore>()((set) => ({
           hitpointsHealed: 0,
           damageTaken: { total: 0, byCreatureKind: new Map<string, number>() },
           experienceGained: 0,
-          loot: {}
+          loot: new Map<string, number>()
         };
 
         //Go through Log but being able to use continue/break (map does not allow it)
@@ -70,7 +69,7 @@ export const useLogStore = create<LogStore>()((set) => ({
             continue;
           }
 
-          //Damage Taken
+          //Damage Taken Line
           match = logLine.match(regexLoseHitpoint);
           if (match) {
             const damageAmount = parseInt(match[1]);
@@ -88,6 +87,37 @@ export const useLogStore = create<LogStore>()((set) => ({
               );
             }
             continue;
+          }
+
+          //Loot Line
+          match = logLine.match(regexLootCreature);
+          if (match) {
+            const creature = match[1]; //Only necessary if needed to separate loot by creatureKind
+            const itemString = match[2];
+
+            //Item String Section
+            while ((match = regexLootItems.exec(itemString)) !== null) {
+              // Avoid infinite loops with zero-width matches
+              if (match.index === regexLootItems.lastIndex) {
+                regexLootItems.lastIndex++;
+              }
+
+              let amount = parseInt(match[1]);
+              let name = match[2];
+
+              //Handles values like "a", "an" or no article for item values
+              if (Number.isNaN(amount)) {
+                amount = 1;
+              }
+
+              if (name === "nothing") continue;
+
+              //If Item exists, add ammount to it, if not, create and add amount
+              draft.logInformation.loot.set(
+                name,
+                amount + (draft.logInformation.loot.get(name) || 0)
+              );
+            }
           }
         }
       })
