@@ -24,12 +24,24 @@ export default function Home() {
     ) as HTMLInputElement;
     const file = fileInput?.files?.[0];
 
+    if (!file) {
+      setErrorMessage("No File Uploaded");
+      return;
+    }
+
     const reader = new FileReader();
 
     reader.onload = (e) => {
       const contents = e.target?.result as string;
       const lines = contents.split("\n");
       setFileContent(lines);
+
+      //Read Log
+      const res = analyzeLog(lines);
+      blackKightHealthCalc(lines);
+
+      if (res) setErrorMessage(res.body);
+      else setErrorMessage("");
     };
 
     reader.readAsText(file as Blob);
@@ -89,19 +101,6 @@ export default function Home() {
         <br />
 
         <section>
-          <button
-            onClick={() => {
-              const res = analyzeLog(fileContent);
-              blackKightHealthCalc(fileContent);
-
-              if (res) setErrorMessage(res.body);
-              else setErrorMessage("");
-            }}
-            className="rounded-md bg-neutral-600 px-4 py-2"
-          >
-            Analyse
-          </button>
-          {errorMessage && <p className="text-red-400">{errorMessage}</p>}
           <ul>
             <li className="flex items-center">
               <img
@@ -163,8 +162,9 @@ export default function Home() {
               type="submit"
               className="rounded-md bg-neutral-600 px-4 py-2"
             >
-              Upload
+              Analyse
             </button>
+            {errorMessage && <p className="text-red-400">{errorMessage}</p>}
           </form>
           {fileContent.length > 0 && (
             <div>
