@@ -7,6 +7,7 @@ import {
   regexLootItems,
   regexLoseHitpoint
 } from "../utils/regex";
+var pluralize = require("pluralize");
 
 export type Error = {
   name: string;
@@ -103,7 +104,7 @@ export const useLogStore = create<LogStore>()((set) => ({
               }
 
               let amount = parseInt(match[1]);
-              let name = match[2];
+              let name = pluralize(match[2], 1);
 
               //Handles values like "a", "an" or no article for item values
               if (Number.isNaN(amount)) {

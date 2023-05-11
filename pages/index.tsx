@@ -2,6 +2,7 @@
 import Head from "next/head";
 import { FormEvent, useState } from "react";
 import { useLogStore } from "../stores/logStore";
+var pluralize = require("pluralize");
 
 export default function Home() {
   const [fileContent, setFileContent] = useState<string[]>([]);
@@ -53,7 +54,11 @@ export default function Home() {
     lootList.push(
       <li key={key + value.toString()} className="flex items-center">
         <p>
-          {value} {key.replace(/(?:^|\s)\S/g, (a) => a.toUpperCase())}
+          {value}{" "}
+          {pluralize(
+            key.replace(/(?:^|\s)\S/g, (a) => a.toUpperCase()),
+            value
+          )}
         </p>
       </li>
     );
