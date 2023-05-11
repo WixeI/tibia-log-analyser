@@ -24,12 +24,15 @@ export const regexGainExperience = /You gained (\d+) experience points\./;
  * match[2]: damageAmount
  */
 export const regexDealDamage =
-  /^(?:A|An)\s+(.+)\s+loses\s+(\d+)\s+hitpoints\s+due\s+to\s+your\s+attack\.$/i;
+  /(?:A|An)\s+(.+)\s+loses\s+(\d+)\s+hitpoints\s+due\s+to\s+your\s+attack\./i;
 
 /**
- * match[1]:
+ * match[1]: creature
+ *
+ * match[2]: rest
  */
-export const regexLootCreature = /Loot of\s+(?:a|an)\s+([a-z\s]+):\s+(.*)/;
+export const regexLootCreature =
+  /Loot of\s+(?:a|an)\s+([^\d\W][\w'’]*(?:\s+[^\d\W_]+)*):\s+(.*)/;
 
 /**
  * match[1]: amount (number/a/an/undefined)
@@ -74,7 +77,7 @@ export const regexLootItems =
 // const text =
 // "A Blue Eyes White Dragon loses 50 hitpoints due to your attack.";
 // const regex =
-// /^(?:A|An)\s+(.+)\s+loses\s+(\d+)\s+hitpoints\s+due\s+to\s+your\s+attack\.$/i;
+// /(?:A|An)\s+(.+)\s+loses\s+(\d+)\s+hitpoints\s+due\s+to\s+your\s+attack\./i;
 // const match = text.match(regex);
 // if (match) {
 // const monster = match[1];
@@ -87,7 +90,7 @@ export const regexLootItems =
 // regexLootCreature Example
 // const text =
 //   "Loot of a giant spider ultra an strong: a gold coin, an elixir, 21 silver coins, spider fang.";
-// const regex = /Loot of\s+(?:a|an)\s+([a-z\s]+):\s+(.*)/;
+// const regex = /Loot of\s+(?:a|an)\s+([^\d\W][\w'’]*(?:\s+[^\d\W_]+)*):\s+(.*)/;
 // const match = text.match(regex);
 // if (match) {
 //   const monster = match[1];

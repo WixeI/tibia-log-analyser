@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable @next/next/no-img-element */
 import Head from "next/head";
 import { FormEvent, useState } from "react";
@@ -6,7 +7,13 @@ var pluralize = require("pluralize");
 
 export default function Home() {
   const [fileContent, setFileContent] = useState<string[]>([]);
-  const { logInformation, analyzeLog } = useLogStore();
+  const {
+    logInformation,
+    analyzeLog,
+    unknownDamageCalc,
+    blackKightHealthCalc,
+    blackKnightHealth
+  } = useLogStore();
   const [errorMessage, setErrorMessage] = useState<string>("");
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -85,6 +92,7 @@ export default function Home() {
           <button
             onClick={() => {
               const res = analyzeLog(fileContent);
+              blackKightHealthCalc(fileContent);
 
               if (res) setErrorMessage(res.body);
               else setErrorMessage("");
@@ -109,6 +117,13 @@ export default function Home() {
               />
               <p>Damage Taken Total: {logInformation.damageTaken.total}hp</p>
             </li>
+            <div className="flex items-center">
+              <img
+                alt=""
+                src="https://www.tibiawiki.com.br/images/b/b7/White_Skull.gif"
+              />
+              <p>By Unknown Sources: {unknownDamageCalc()}</p>
+            </div>
             <ul>{creatureList}</ul>
             <li className="flex items-center">
               <img
@@ -128,6 +143,14 @@ export default function Home() {
             </div>
             <ul>{lootList}</ul>
           </ul>
+
+          <div className="flex items-center">
+            <img
+              alt=""
+              src="https://www.tibiawiki.com.br/images/e/ef/Black_Knight.gif"
+            />
+            <p>Black Knight's Health: {blackKnightHealth}</p>
+          </div>
         </section>
 
         <br />

@@ -5,7 +5,8 @@ import {
   regexGainExperience,
   regexLootCreature,
   regexLootItems,
-  regexLoseHitpoint
+  regexLoseHitpoint,
+  regexDealDamage
 } from "../utils/regex";
 var pluralize = require("pluralize");
 
@@ -24,18 +25,20 @@ type LogStore = {
     experienceGained: number;
     loot: Map<string, number>;
   };
+  blackKnightHealth: number | string;
   analyzeLog: (log: string[]) => void | Error;
-  // blackKnightHealthRange: () => number;
   unknownDamageCalc: () => number;
+  blackKightHealthCalc: (log: string[]) => void | Error;
 };
 
-export const useLogStore = create<LogStore>()((set) => ({
+export const useLogStore = create<LogStore>()((set, get) => ({
   logInformation: {
     hitpointsHealed: 0,
     damageTaken: { total: 0, byCreatureKind: new Map<string, number>() },
     experienceGained: 0,
     loot: new Map<string, number>()
   },
+  blackKnightHealth: "Insuficient Data",
   analyzeLog: (log) => {
     if (log.length < 1) return { name: "Empty Log", body: "Log is Empty!" };
 
@@ -124,5 +127,46 @@ export const useLogStore = create<LogStore>()((set) => ({
       })
     );
   },
-  unknownDamageCalc: () => 3
+  unknownDamageCalc: () => {
+    const total = get().logInformation.damageTaken.total;
+    let totalFromKnownSources = 0;
+    get().logInformation.damageTaken.byCreatureKind.forEach((value) => {
+      totalFromKnownSources += value;
+    });
+    return total - totalFromKnownSources;
+  },
+  blackKightHealthCalc: (log) => {
+    if (log.length < 1) return { name: "Empty Log", body: "Log is Empty!" };
+    let blackKnightHealth = 0;
+    //Go through Log but being able to use continue/break (map does not allow it)
+    for (let i = 0; i < log.length; i++) {
+      const logLine = log[i];
+      let match;
+
+      //Creature Damage Received Line
+      match = logLine.match(regexDealDamage);
+
+      if (match) {
+        const creature = match[1];
+
+        const damageReceived = parseInt(match[2]);
+
+        if (creature === "Black Knight") {
+          blackKnightHealth += damageReceived;
+        }
+      }
+
+      //Creature Loot Line
+      match = logLine.match(regexLootCreature);
+      if (match && match[1] === "Black Knight") {
+        set(() => ({ blackKnightHealth: blackKnightHealth }));
+        return;
+      }
+    }
+    set(() => ({ blackKnightHealth: "Insuficient Data" }));
+    return {
+      name: "Insuficient Data",
+      body: "You didn't defeat a Black Knight, therefore no health amount can be estimated"
+    };
+  }
 }));
