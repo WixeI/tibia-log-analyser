@@ -53,6 +53,10 @@ export default function Home() {
   for (let [key, value] of logInformation.loot.entries()) {
     lootList.push(
       <li key={key + value.toString()} className="flex items-center">
+        <img
+          alt="" //Decorative Image Only
+          src={`https://www.tibiawiki.com.br/images/e/ef/Brocade_Bag.gif`}
+        />
         <p>
           {value}{" "}
           {pluralize(
@@ -115,7 +119,13 @@ export default function Home() {
                 Experience Gained Total: {logInformation.experienceGained}xp
               </p>
             </li>
-            <p>List of Items</p>
+            <div className="flex">
+              <img
+                alt=""
+                src="https://www.tibiawiki.com.br/images/d/d8/Brocade_Backpack.gif"
+              />
+              <p>List of Items</p>
+            </div>
             <ul>{lootList}</ul>
           </ul>
         </section>
