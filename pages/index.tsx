@@ -1,6 +1,44 @@
 import Head from "next/head";
+import { FormEvent, useState } from "react";
+import { useLogStore } from "../stores/logStore";
 
 export default function Home() {
+  const [fileContent, setFileContent] = useState<string[]>([]);
+  const { logInformation, analyzeLog } = useLogStore();
+  const [errorMessage, setErrorMessage] = useState<string>("");
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const fileInput = event.currentTarget.querySelector(
+      'input[type="file"]'
+    ) as HTMLInputElement;
+    const file = fileInput?.files?.[0];
+
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      const contents = e.target?.result as string;
+      const lines = contents.split("\n");
+      setFileContent(lines);
+    };
+
+    reader.readAsText(file as Blob);
+  };
+
+  //Gets a list of HTML nodes based on CreatureKind list
+  let list = [];
+  for (let [
+    key,
+    value
+  ] of logInformation.damageTaken.byCreatureKind.entries()) {
+    list.push(
+      <p key={key + value.toString()}>
+        By a {key}: {value}
+      </p>
+    );
+  }
+
   return (
     <>
       <Head>
@@ -9,9 +47,54 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
-        <h1 className="text-4xl text-primary-400">Test</h1>
-        <p>Another Test</p>
+      <main className="p-4">
+        <h1 className="text-4xl text-primary-400">TibiAnalyser</h1>
+
+        <br />
+
+        <section>
+          <button
+            onClick={() => {
+              const res = analyzeLog(fileContent);
+
+              if (res) setErrorMessage(res.body);
+              else setErrorMessage("");
+            }}
+            className="rounded-md bg-neutral-600 px-4 py-2"
+          >
+            Analyse
+          </button>
+          {errorMessage && <p className="text-red-400">{errorMessage}</p>}
+          <p>HitpointsHealed: {logInformation.hitpointsHealed}</p>
+          <p>DamageTaken Total: {logInformation.damageTaken.total}</p>
+          {list}
+          <p>ExperienceGained: {logInformation.experienceGained}</p>
+        </section>
+
+        <br />
+
+        <section>
+          <h1>Upload a TXT file</h1>
+          <form onSubmit={handleSubmit}>
+            <input type="file" />
+            <button
+              type="submit"
+              className="rounded-md bg-neutral-600 px-4 py-2"
+            >
+              Upload
+            </button>
+          </form>
+          {fileContent.length > 0 && (
+            <div>
+              <h2>File Content:</h2>
+              <ul>
+                {fileContent.map((line, index) => (
+                  <li key={index}>{line}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </section>
       </main>
     </>
   );
