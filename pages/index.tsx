@@ -1,5 +1,6 @@
+/* eslint-disable @next/next/no-img-element */
 import Head from "next/head";
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, useRef } from "react";
 import { useLogStore } from "../stores/logStore";
 
 export default function Home() {
@@ -33,9 +34,17 @@ export default function Home() {
     value
   ] of logInformation.damageTaken.byCreatureKind.entries()) {
     list.push(
-      <p key={key + value.toString()}>
-        By a {key}: {value}
-      </p>
+      <li key={key + value.toString()} className="flex items-center">
+        <img
+          alt={key + " sprite"}
+          src={`https://static.tibia.com/images/library/${key
+            .replace(/\s/g, "")
+            .toLowerCase()}.gif`}
+        />
+        <p>
+          By {key.replace(/(?:^|\s)\S/g, (a) => a.toUpperCase())}: {value}
+        </p>
+      </li>
     );
   }
 
@@ -65,10 +74,30 @@ export default function Home() {
             Analyse
           </button>
           {errorMessage && <p className="text-red-400">{errorMessage}</p>}
-          <p>HitpointsHealed: {logInformation.hitpointsHealed}</p>
-          <p>DamageTaken Total: {logInformation.damageTaken.total}</p>
-          {list}
-          <p>ExperienceGained: {logInformation.experienceGained}</p>
+          <ul>
+            <li className="flex items-center">
+              <img
+                src="https://www.tibiawiki.com.br/images/9/91/Great_Health_Potion.gif"
+                alt="Hitpoints Sprite"
+              />
+              <p>Hitpoints Healed Total: {logInformation.hitpointsHealed}</p>
+            </li>
+            <li className="flex items-center">
+              <img
+                src="https://www.tibiawiki.com.br/images/c/c4/Stonecutter_Axe.gif"
+                alt="Hitpoints Sprite"
+              />
+              <p>Damage Taken Total: {logInformation.damageTaken.total}</p>
+            </li>
+            <ul>{list}</ul>
+            <li className="flex items-center">
+              <img
+                src="https://www.tibiawiki.com.br/images/b/b2/Achievement_Info_1-1.gif"
+                alt="Hitpoints Sprite"
+              />
+              <p>Experience Gained Total: {logInformation.experienceGained}</p>
+            </li>
+          </ul>
         </section>
 
         <br />
