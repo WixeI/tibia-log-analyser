@@ -1,3 +1,6 @@
+/**
+ * match[1]: healAmount
+ */
 export const regexHealYourself = /You healed yourself for (\d+)/;
 
 /**
@@ -9,9 +12,22 @@ export const regexHealYourself = /You healed yourself for (\d+)/;
  */
 export const regexLoseHitpoint =
   /You lose (\d+) hitpoints?(?: due to an attack by (?:a|an) ([^.]*))?\.?/;
+
+/**
+ * match[1]: experienceAmount
+ */
 export const regexGainExperience = /You gained (\d+) experience points\./;
+
+/**
+ * match[1]: monsterName
+ * match[2]: damageAmount
+ */
 export const regexDealDamage =
   /^(?:A|An)\s+(.+)\s+loses\s+(\d+)\s+hitpoints\s+due\s+to\s+your\s+attack\.$/i;
+
+/**
+ * match[1]: 
+ */
 export const regexLoot = / /;
 
 //regexHealYourself Example

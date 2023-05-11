@@ -1,7 +1,6 @@
 import { produce } from "immer";
 import { create } from "zustand";
 import {
-  regexDealDamage,
   regexHealYourself,
   regexGainExperience,
   regexLoot,

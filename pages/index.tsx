@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import Head from "next/head";
-import { FormEvent, useState, useRef } from "react";
+import { FormEvent, useState } from "react";
 import { useLogStore } from "../stores/logStore";
 
 export default function Home() {
@@ -36,13 +36,13 @@ export default function Home() {
     list.push(
       <li key={key + value.toString()} className="flex items-center">
         <img
-          alt={key + " sprite"}
+          alt="" //Decorative Image Only
           src={`https://static.tibia.com/images/library/${key
             .replace(/\s/g, "")
             .toLowerCase()}.gif`}
         />
         <p>
-          By {key.replace(/(?:^|\s)\S/g, (a) => a.toUpperCase())}: {value}
+          By {key.replace(/(?:^|\s)\S/g, (a) => a.toUpperCase())}: {value}hp
         </p>
       </li>
     );
@@ -78,24 +78,26 @@ export default function Home() {
             <li className="flex items-center">
               <img
                 src="https://www.tibiawiki.com.br/images/9/91/Great_Health_Potion.gif"
-                alt="Hitpoints Sprite"
+                alt="" //Decorative Image Only
               />
-              <p>Hitpoints Healed Total: {logInformation.hitpointsHealed}</p>
+              <p>Hitpoints Healed Total: {logInformation.hitpointsHealed}hp</p>
             </li>
             <li className="flex items-center">
               <img
                 src="https://www.tibiawiki.com.br/images/c/c4/Stonecutter_Axe.gif"
-                alt="Hitpoints Sprite"
+                alt="" //Decorative Image Only
               />
-              <p>Damage Taken Total: {logInformation.damageTaken.total}</p>
+              <p>Damage Taken Total: {logInformation.damageTaken.total}hp</p>
             </li>
             <ul>{list}</ul>
             <li className="flex items-center">
               <img
                 src="https://www.tibiawiki.com.br/images/b/b2/Achievement_Info_1-1.gif"
-                alt="Hitpoints Sprite"
+                alt="" //Decorative Image Only
               />
-              <p>Experience Gained Total: {logInformation.experienceGained}</p>
+              <p>
+                Experience Gained Total: {logInformation.experienceGained}xp
+              </p>
             </li>
           </ul>
         </section>
