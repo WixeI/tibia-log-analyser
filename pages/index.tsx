@@ -100,7 +100,9 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      {/* Background Image */}
       <div className="invisible absolute bottom-0 left-0 right-0 top-0 -z-30 bg-neutral-700 bg-opacity-80 bg-stone-pattern bg-auto bg-repeat opacity-60 bg-blend-multiply blur-[0px] lg:visible" />
+      {/* Body */}
       <div className="mx-auto flex h-full flex-col border-x-2 border-neutral-800 bg-neutral-700 p-4 lg:h-screen lg:max-w-[80vw] lg:shadow-3xl">
         <header className="flex justify-center pb-6 lg:pb-8">
           <img
@@ -114,6 +116,7 @@ export default function Home() {
         <main className="flex flex-col-reverse lg:h-full lg:flex-row lg:justify-center lg:gap-8 lg:overflow-hidden">
           {/* Log & Form Section */}
           <section className="flex flex-col gap-4">
+            {/* Form Section */}
             <section>
               <h1 className="sr-only">Log & Form Section</h1>
               <form
@@ -139,6 +142,7 @@ export default function Home() {
                 {errorMessage && <p className="text-red-400">{errorMessage}</p>}
               </form>
             </section>
+            {/* Log Section */}
             {fileContent.length > 0 && (
               <section className="max-h-[500px] overflow-y-auto rounded-md border border-neutral-800 bg-neutral-600 p-2 scrollbar-thin lg:h-full lg:max-h-full">
                 <h1 className="sr-only">Log Content:</h1>
