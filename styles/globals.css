@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  * {
+    @apply scrollbar scrollbar-track-neutral-800 scrollbar-thumb-neutral-400;
+  }
+
+  body {
+    @apply bg-neutral-700 text-neutral-50;
+  }
+}

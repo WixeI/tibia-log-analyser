@@ -17,5 +17,8 @@ module.exports = {
       }
     }
   },
-  plugins: ["prettier-plugin-tailwindcss"]
+  variants: {
+    scrollbar: ["rounded"]
+  },
+  plugins: ["prettier-plugin-tailwindcss", require("tailwind-scrollbar")]
 };
