@@ -100,31 +100,48 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="flex flex-col p-4 lg:h-screen">
-        <header className="flex justify-center pb-8">
-          <h1 className="text-4xl text-primary-400">TibiAnalyser</h1>
+      <div className="invisible absolute bottom-0 left-0 right-0 top-0 -z-30 bg-neutral-700 bg-opacity-80 bg-stone-pattern bg-auto bg-repeat opacity-60 bg-blend-multiply blur-[0px] lg:visible" />
+      <div className="mx-auto flex h-full flex-col border-x-2 border-neutral-800 bg-neutral-700 p-4 lg:h-screen lg:max-w-[80vw] lg:shadow-3xl">
+        <header className="flex justify-center pb-6 lg:pb-8">
+          <img
+            alt=""
+            src="/logo.png"
+            className={fileContent.length > 0 ? "h-12" : "max-h-32"}
+          />
+          <h1 className="sr-only">TibiAnalyser. Analyse Tibia Server Logs!</h1>
         </header>
 
-        <main className="flex flex-col gap-8 lg:h-full lg:flex-row lg:justify-center lg:overflow-hidden">
+        <main className="flex flex-col-reverse lg:h-full lg:flex-row lg:justify-center lg:gap-8 lg:overflow-hidden">
           {/* Log & Form Section */}
-          <section className="flex flex-col gap-2">
-            <h1>
-              Upload a Server Log <span className="font-semibold">.txt</span>{" "}
-              file
-            </h1>
-            <form onSubmit={handleSubmit}>
-              <input type="file" className="" />
-              <button
-                type="submit"
-                className="rounded-md bg-neutral-600 px-4 py-2"
+          <section className="flex flex-col gap-4">
+            <section>
+              <h1 className="sr-only">Log & Form Section</h1>
+              <form
+                onSubmit={handleSubmit}
+                className="flex flex-wrap items-end gap-4"
               >
-                Analyse
-              </button>
-              {errorMessage && <p className="text-red-400">{errorMessage}</p>}
-            </form>
+                <label>
+                  <p className="mb-2">
+                    Upload a Server Log{" "}
+                    <span className="font-semibold">.txt</span> file
+                  </p>{" "}
+                  <input
+                    type="file"
+                    className="cursor-pointer rounded-lg bg-neutral-600 pr-2"
+                  />
+                </label>
+                <button
+                  type="submit"
+                  className="rounded-md bg-neutral-600 px-4 py-2 transition-all hover:-translate-y-1 hover:bg-neutral-500 active:translate-y-0"
+                >
+                  Analyse
+                </button>
+                {errorMessage && <p className="text-red-400">{errorMessage}</p>}
+              </form>
+            </section>
             {fileContent.length > 0 && (
               <section className="max-h-[500px] overflow-y-auto rounded-md border border-neutral-800 bg-neutral-600 p-2 scrollbar-thin lg:h-full lg:max-h-full">
-                <h2 className="sr-only">Log Content:</h2>
+                <h1 className="sr-only">Log Content:</h1>
                 <ul>
                   {fileContent.map((line, index) => (
                     <li key={index}>{line}</li>
@@ -238,7 +255,7 @@ export default function Home() {
                     <img
                       alt=""
                       src="https://www.tibiawiki.com.br/images/e/ef/Black_Knight.gif"
-                      className="-z-10 w-12"
+                      className="w-12"
                     />
                     <p>
                       Black Knight's Health:{" "}
