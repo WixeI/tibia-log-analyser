@@ -15,7 +15,9 @@ export default function Home() {
     blackKnightHealth
   } = useLogStore();
   const [errorMessage, setErrorMessage] = useState<string>("");
+  //Visual States & Functions
 
+  //Handle Functions
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -47,22 +49,25 @@ export default function Home() {
     reader.readAsText(file as Blob);
   };
 
-  //Gets a list of HTML nodes based on CreatureKind list
+  //React Nodes
   let creatureList = [];
   for (let [
     key,
     value
   ] of logInformation.damageTaken.byCreatureKind.entries()) {
     creatureList.push(
-      <li key={key + value.toString()} className="flex items-center">
+      <li key={key + value.toString()} className="flex items-center gap-2">
         <img
           alt="" //Decorative Image Only
           src={`https://static.tibia.com/images/library/${key
             .replace(/\s/g, "")
             .toLowerCase()}.gif`}
+          className="w-12"
         />
         <p>
-          By {key.replace(/(?:^|\s)\S/g, (a) => a.toUpperCase())}: {value}hp
+          By {key.replace(/(?:^|\s)\S/g, (a) => a.toUpperCase())}:{" "}
+          <span className="font-semibold text-rose-400">{value}</span>
+          <span className="text-xs"> hp</span>
         </p>
       </li>
     );
@@ -71,7 +76,7 @@ export default function Home() {
   let lootList = [];
   for (let [key, value] of logInformation.loot.entries()) {
     lootList.push(
-      <li key={key + value.toString()} className="flex items-center">
+      <li key={key + value.toString()} className="flex items-center gap-1">
         <img
           alt="" //Decorative Image Only
           src={`https://www.tibiawiki.com.br/images/e/ef/Brocade_Bag.gif`}
@@ -96,64 +101,138 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="p-4">
-        <h1 className="text-4xl text-primary-400">TibiAnalyser</h1>
+        <header className="mb-8 flex justify-center">
+          <h1 className="text-4xl text-primary-400">TibiAnalyser</h1>
+        </header>
 
-        <br />
+        {/* Data Section */}
+        {fileContent.length > 0 && (
+          <section className="mb-8">
+            <h1 className="sr-only">Data Section</h1>
+            <ul className="flex flex-col gap-2">
+              {/* Experience Gained */}
+              <li className="flex items-center gap-2">
+                <img
+                  src="https://www.tibiawiki.com.br/images/b/b2/Achievement_Info_1-1.gif"
+                  alt="" //Decorative Image Only
+                  className="w-8"
+                />
+                <p>
+                  Experience Gained Total:{" "}
+                  <span className="font-semibold text-cyan-400">
+                    {logInformation.experienceGained}
+                  </span>
+                  <span className="text-xs"> xp</span>
+                </p>
+              </li>
 
-        <section>
-          <ul>
-            <li className="flex items-center">
-              <img
-                src="https://www.tibiawiki.com.br/images/9/91/Great_Health_Potion.gif"
-                alt="" //Decorative Image Only
-              />
-              <p>Hitpoints Healed Total: {logInformation.hitpointsHealed}hp</p>
-            </li>
-            <li className="flex items-center">
-              <img
-                src="https://www.tibiawiki.com.br/images/c/c4/Stonecutter_Axe.gif"
-                alt="" //Decorative Image Only
-              />
-              <p>Damage Taken Total: {logInformation.damageTaken.total}hp</p>
-            </li>
-            <div className="flex items-center">
-              <img
-                alt=""
-                src="https://www.tibiawiki.com.br/images/b/b7/White_Skull.gif"
-              />
-              <p>By Unknown Sources: {unknownDamageCalc()}</p>
-            </div>
-            <ul>{creatureList}</ul>
-            <li className="flex items-center">
-              <img
-                src="https://www.tibiawiki.com.br/images/b/b2/Achievement_Info_1-1.gif"
-                alt="" //Decorative Image Only
-              />
-              <p>
-                Experience Gained Total: {logInformation.experienceGained}xp
-              </p>
-            </li>
-            <div className="flex">
-              <img
-                alt=""
-                src="https://www.tibiawiki.com.br/images/d/d8/Brocade_Backpack.gif"
-              />
-              <p>List of Items</p>
-            </div>
-            <ul>{lootList}</ul>
-          </ul>
+              {/* Damage Healed */}
+              <li className="flex items-center gap-2">
+                <img
+                  src="https://www.tibiawiki.com.br/images/9/91/Great_Health_Potion.gif"
+                  alt="" //Decorative Image Only
+                />
+                <p>
+                  Hitpoints Healed Total:{" "}
+                  <span className="font-semibold text-emerald-400">
+                    {logInformation.hitpointsHealed}
+                  </span>
+                  <span className="text-xs"> hp</span>
+                </p>
+              </li>
 
-          <div className="flex items-center">
-            <img
-              alt=""
-              src="https://www.tibiawiki.com.br/images/e/ef/Black_Knight.gif"
-            />
-            <p>Black Knight's Health: {blackKnightHealth}</p>
-          </div>
-        </section>
+              {/* Damage Taken */}
+              <li>
+                <details open className="group rounded-sm transition-all">
+                  <summary className="mb-1 flex cursor-pointer items-center gap-2 rounded-sm p-1 transition-all hover:bg-neutral-600">
+                    <img
+                      src="https://www.tibiawiki.com.br/images/c/c4/Stonecutter_Axe.gif"
+                      alt="" //Decorative Image Only
+                    />
+                    <p>
+                      Damage Taken Total:{" "}
+                      <span className="font-semibold text-rose-400">
+                        {logInformation.damageTaken.total}
+                      </span>
+                      <span className="text-xs"> hp</span>
+                    </p>
+                  </summary>
+                  <ul className="ml-8">
+                    <li className="flex items-center">
+                      <img
+                        alt=""
+                        src="https://www.tibiawiki.com.br/images/b/b7/White_Skull.gif"
+                      />
+                      <p>
+                        By Unknown Sources:{" "}
+                        <span className="font-semibold text-rose-400">
+                          {unknownDamageCalc()}
+                        </span>
+                        <span className="text-xs"> hp</span>
+                      </p>
+                    </li>
+                  </ul>
+                </details>
+              </li>
 
-        <br />
+              {/* Damage by Creature Kind */}
+              <li>
+                <details open className="group rounded-sm transition-all">
+                  <summary className="mb-1 flex cursor-pointer items-center gap-2 rounded-sm p-1 transition-all hover:bg-neutral-600">
+                    <img
+                      alt=""
+                      src="https://www.tibiawiki.com.br/images/8/80/Execowtioner_Axe.gif"
+                    />
+                    <p>Damage Taken By Creature Kind</p>
+                  </summary>
+                  <ul className="ml-8">{creatureList}</ul>
+                </details>
+              </li>
 
+              {/* List of Items */}
+              <li>
+                <details open className="group rounded-sm transition-all">
+                  <summary className="mb-1 flex cursor-pointer items-center gap-2 rounded-sm p-1 transition-all hover:bg-neutral-600">
+                    <img
+                      alt=""
+                      src="https://www.tibiawiki.com.br/images/d/d8/Brocade_Backpack.gif"
+                    />
+                    <p>List of Items</p>
+                  </summary>
+                  <ul className="ml-8">{lootList}</ul>
+                </details>
+              </li>
+
+              {/* Black Knight's Health */}
+              <li>
+                <div className="-ml-2 -mt-5 flex items-end">
+                  <img
+                    alt=""
+                    src="https://www.tibiawiki.com.br/images/e/ef/Black_Knight.gif"
+                    className="-z-10 w-12"
+                  />
+                  <p>
+                    Black Knight's Health:{" "}
+                    <span
+                      className={
+                        typeof blackKnightHealth === "number"
+                          ? "font-semibold text-rose-400"
+                          : "text-red-400"
+                      }
+                    >
+                      {blackKnightHealth}
+                    </span>
+                    {typeof blackKnightHealth === "number" && (
+                      <span className="text-xs"> hp</span>
+                    )}
+                  </p>
+                </div>
+              </li>
+            </ul>
+          </section>
+        )}
+
+        {/* Log & Form Section */}
         <section>
           <h1>Upload a TXT file</h1>
           <form onSubmit={handleSubmit}>
